@@ -26,7 +26,6 @@ import org.cytoscape.work.TaskMonitor;
 
 public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 
-	private static final String FOLDER_NAME = "network_and_style";
 	private static final String JSON_EXT = ".json";
 	private static final String FILE_NAME_SEPARATOR = "____";
 
@@ -110,7 +109,7 @@ public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 			// Archive name
 			final String originalName = file.getName();
 			final String archiveName = originalName.split(FILE_NAME_SEPARATOR)[0] + JSON_EXT;
-			final Path dataFilePath = Paths.get(FOLDER_NAME, archiveName);
+			final Path dataFilePath = Paths.get(archiveName);
 			zipFilePath = dataFilePath.toString();
 
 			// This is for Windows System: Replace file separator to slash.

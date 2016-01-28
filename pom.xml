@@ -165,7 +165,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.cytoscape</groupId>
-			<artifactId>command-executor-api</artifactId>
+			<artifactId>swing-util-api</artifactId>
 			<version>${cytoscape.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -195,6 +195,13 @@
 			<artifactId>pax-logging-service</artifactId>
 			<version>1.5.3</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- For preview -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>9.3.7.v20160115</version>
 		</dependency>
 
 		<!-- Testing -->

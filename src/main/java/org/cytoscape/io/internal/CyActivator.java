@@ -5,9 +5,11 @@ import static org.cytoscape.application.swing.ActionEnableSupport.ENABLE_FOR_NET
 
 import java.util.Properties;
 
+import org.cytoscape.application.CyApplicationConfiguration;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.io.BasicCyFileFilter;
 import org.cytoscape.io.DataCategory;
+import org.cytoscape.io.internal.preview.PreviewServer;
 import org.cytoscape.io.internal.task.PublishForWebTaskFactory;
 import org.cytoscape.io.internal.task.PublishForWebWriterFactoryImpl;
 import org.cytoscape.io.util.StreamUtil;
@@ -16,6 +18,7 @@ import org.cytoscape.io.write.CySessionWriterFactory;
 import org.cytoscape.io.write.CyWriterFactory;
 import org.cytoscape.io.write.VizmapWriterFactory;
 import org.cytoscape.service.util.AbstractCyActivator;
+import org.cytoscape.util.swing.OpenBrowser;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -32,7 +35,9 @@ public class CyActivator extends AbstractCyActivator {
 
 	public void start(BundleContext bc) {
 
+		final OpenBrowser openBrowser = getService(bc, OpenBrowser.class);
 		final CyApplicationManager applicationManager = getService(bc, CyApplicationManager.class);
+		final CyApplicationConfiguration config = getService(bc, CyApplicationConfiguration.class);
 		final StreamUtil streamUtil = getService(bc, StreamUtil.class);
 		final VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
 		
@@ -55,7 +60,7 @@ public class CyActivator extends AbstractCyActivator {
 		
 		
 		// Export task
-		final PublishForWebTaskFactory publishForWebTaskFactory = new PublishForWebTaskFactory(publishForWebWriterFactory);
+		final PublishForWebTaskFactory publishForWebTaskFactory = new PublishForWebTaskFactory(publishForWebWriterFactory, openBrowser);
 		final Properties publishForWebTaskFactoryProps = new Properties();
 		publishForWebTaskFactoryProps.setProperty(PREFERRED_MENU,"File.Export");
 		publishForWebTaskFactoryProps.setProperty(ENABLE_FOR, ENABLE_FOR_NETWORK_AND_VIEW);
@@ -68,6 +73,14 @@ public class CyActivator extends AbstractCyActivator {
 		
 		registerAllServices(bc, publishForWebTaskFactory, publishForWebTaskFactoryProps);
 		registerServiceListener(bc, publishForWebWriterFactory, "registerFactory", "unregisterFactory", VizmapWriterFactory.class);
+		
+		PreviewServer server = new PreviewServer(config);
+		try {
+			System.out.println("Starting preview server...");
+			server.startServer();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -38,6 +38,10 @@ public class PublishForWebWriterFactoryImpl implements CyWriterFactory, CySessio
 
 	@Override
 	public CyWriter createWriter(OutputStream outputStream, CySession session) {
+		if(this.jsonStyleWriterFactory == null) {
+			throw new IllegalStateException("Could not find a dependency: JSON Style writer service");
+		}
+		
 		return new PublishForWebWriterImpl(outputStream, jsonStyleWriterFactory, vmm, cytoscapejsWriterFactory,
 				cyApplicationManager);
 	}
@@ -50,11 +54,8 @@ public class PublishForWebWriterFactoryImpl implements CyWriterFactory, CySessio
 	
 	@SuppressWarnings("rawtypes")
 	public void registerFactory(final VizmapWriterFactory writerFactory, final Map props) {
-	
-		System.out.println(writerFactory.getClass().getName());
 		if (writerFactory.getClass().getName().equals("org.cytoscape.io.internal.write.json.CytoscapeJsVisualStyleWriterFactory")) {
 			this.jsonStyleWriterFactory = writerFactory;
-			System.out.println("Got style writer service");
 		}
 	}
 
