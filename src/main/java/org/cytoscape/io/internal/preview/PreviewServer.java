@@ -11,12 +11,15 @@ public class PreviewServer {
 	
 	private final PreviewUtil util;
 	
+	private Server server;
+	
+	
 	public PreviewServer(final PreviewUtil util) {
 		this.util = util;
 	}
 
 	public void startServer() throws Exception {
-		final Server server = new Server(3000);
+		this.server = new Server(3000);
 		final ResourceHandler resource_handler = new ResourceHandler();
 		resource_handler.setDirectoriesListed(true);
 		resource_handler.setWelcomeFiles(new String[] { "index.html" });
@@ -31,5 +34,9 @@ public class PreviewServer {
 
 		server.start();
 		System.out.println("listening....");
+	}
+	
+	public void stopServer() throws Exception {
+		server.stop();
 	}
 }

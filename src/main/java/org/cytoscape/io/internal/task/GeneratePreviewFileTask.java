@@ -64,6 +64,7 @@ public class GeneratePreviewFileTask extends AbstractTask {
 		if (networkFile.exists()) {
 			networkFile.delete();
 		}
+		
 		final CyWriter writer = cytoscapejsWriterFactory.createWriter(new FileOutputStream(networkFile), view);
 		writer.run(tm);
 		tm.setProgress(0.8);

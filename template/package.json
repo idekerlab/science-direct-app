@@ -1,0 +1,31 @@
+{
+  "name": "preview-publish",
+  "version": "1.0.0",
+  "description": "Preview template for Elsevier project.",
+  "dependencies": {},
+  "devDependencies": {
+    "connect": "^2.14.4",
+    "connect-livereload": "^0.4.0",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^0.0.7",
+    "main-bower-files": "latest",
+    "gulp-cache": "^0.1.1",
+    "gulp-clean": "^0.2.4",
+    "gulp-csso": "^0.2.6",
+    "gulp-filter": "^0.4.1",
+    "gulp-flatten": "^0.0.2",
+    "gulp-imagemin": "^0.5.0",
+    "gulp-jshint": "^1.5.3",
+    "gulp-livereload": "^1.2.0",
+    "gulp-load-plugins": "^0.5.0",
+    "gulp-size": "^0.3.0",
+    "gulp-uglify": "^0.2.1",
+    "gulp-useref": "^0.4.2",
+    "jshint-stylish": "^0.2.0",
+    "opn": "^0.1.1",
+    "wiredep": "^1.4.3"
+  },
+  "engines": {
+    "node": ">=5.5.0"
+  }
+}

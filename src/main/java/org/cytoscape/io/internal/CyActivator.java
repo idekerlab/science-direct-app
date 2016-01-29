@@ -1,12 +1,18 @@
 package org.cytoscape.io.internal;
 
-import static org.cytoscape.work.ServiceProperties.*;
 import static org.cytoscape.application.swing.ActionEnableSupport.ENABLE_FOR_NETWORK_AND_VIEW;
+import static org.cytoscape.work.ServiceProperties.ENABLE_FOR;
+import static org.cytoscape.work.ServiceProperties.ID;
+import static org.cytoscape.work.ServiceProperties.IN_TOOL_BAR;
+import static org.cytoscape.work.ServiceProperties.LARGE_ICON_URL;
+import static org.cytoscape.work.ServiceProperties.MENU_GRAVITY;
+import static org.cytoscape.work.ServiceProperties.PREFERRED_MENU;
+import static org.cytoscape.work.ServiceProperties.TITLE;
+import static org.cytoscape.work.ServiceProperties.TOOLTIP;
+import static org.cytoscape.work.ServiceProperties.TOOL_BAR_GRAVITY;
 
 import java.io.IOException;
 import java.util.Properties;
-
-import javax.management.RuntimeErrorException;
 
 import org.cytoscape.application.CyApplicationConfiguration;
 import org.cytoscape.application.CyApplicationManager;
@@ -20,7 +26,6 @@ import org.cytoscape.io.internal.task.PublishForWebWriterFactoryImpl;
 import org.cytoscape.io.util.StreamUtil;
 import org.cytoscape.io.write.CyNetworkViewWriterFactory;
 import org.cytoscape.io.write.CySessionWriterFactory;
-import org.cytoscape.io.write.CyWriterFactory;
 import org.cytoscape.io.write.VizmapWriterFactory;
 import org.cytoscape.service.util.AbstractCyActivator;
 import org.cytoscape.util.swing.OpenBrowser;
@@ -34,6 +39,9 @@ import org.slf4j.LoggerFactory;
 public class CyActivator extends AbstractCyActivator {
 
 	private static final Logger logger = LoggerFactory.getLogger(CyActivator.class);
+
+	private PreviewServer server;
+	
 
 	public CyActivator() {
 		super();
@@ -92,21 +100,26 @@ public class CyActivator extends AbstractCyActivator {
 		try {
 			generator.extractPreviewTemplate();
 		} catch (IOException e1) {
-			e1.printStackTrace();
 			throw new RuntimeException("Could not prepare preview template.", e1);
 		}
 		
-		PreviewServer server = new PreviewServer(util);
+		this.server = new PreviewServer(util);
 		try {
-			System.out.println("Starting preview server...");
 			server.startServer();
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Faild to start preview server.", e);
 		}
 	}
 
 	@Override
 	public void shutDown() {
 		logger.info("Shutting down Publish service...");
+		try {
+			server.stopServer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Faild to stop preview server.", e);
+		}
 	}
 }

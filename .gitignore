@@ -3,3 +3,7 @@ target
 .DS_Store
 .classpath
 .settings
+template/node_modules
+template/dist
+template/.idea
+template/app/bower_components

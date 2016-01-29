@@ -6,13 +6,8 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.cytoscape.application.CyApplicationManager;
-import org.cytoscape.io.internal.preview.PreviewUtil;
-import org.cytoscape.io.write.CyNetworkViewWriterFactory;
 import org.cytoscape.io.write.CySessionWriterFactory;
-import org.cytoscape.io.write.VizmapWriterFactory;
 import org.cytoscape.util.swing.OpenBrowser;
-import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
 import org.cytoscape.work.swing.DialogTaskManager;
@@ -54,10 +49,12 @@ public class PreviewExportTask extends AbstractTask {
 						JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, icon, OPTIONS, OPTION_EXPORT);
 				final JDialog dialog = optionPane.createDialog("Cytoscape: Publish to Web");
 				dialog.setAlwaysOnTop(true);
+				dialog.setModal(true);
 				dialog.setVisible(true);
+				dialog.setLocationByPlatform(true);
 				dialog.requestFocus();
 				final Object selection = optionPane.getValue();
-				System.out.println("Selection: " + selection.toString());
+//				System.out.println("Selection: " + selection.toString());
 				if (selection.toString().equals(OPTION_EXPORT)) {
 					runExport();
 				}

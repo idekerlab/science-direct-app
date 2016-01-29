@@ -16,6 +16,6 @@ public class PreviewUtil {
 	
 	public final String getTemplatePath() {
 		final File configRoot = appConfig.getConfigurationDirectoryLocation();
-		return configRoot.getAbsolutePath() + File.separator + "preview_template" + File.separator + "preview";
+		return configRoot.getAbsolutePath() + File.separator + "preview_template";
 	}
 }
