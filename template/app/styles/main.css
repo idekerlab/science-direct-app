@@ -38,12 +38,14 @@ body {
     position: fixed;
     top: 0.5em;
     left: 0.5em;
-    width: 200px;
-    height: 50px;
+    width: 2.5em;
+    height: 1.5em;
     margin: 0;
-    background-color: rgba(200, 200, 200, 0.8);
-    padding-top: 10px;
+    font-weight: 300;
+    background-color: #6D9C39;
+    padding-top: 0.25em;
     text-align: center;
     font-size: 2em;
-    color: red;
+    color: white;
+    vertical-align: middle;
 }

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<bundle.symbolicName>org.cytoscape.io.publish</bundle.symbolicName>
+		<bundle.symbolicName>org.cytoscape.io.science-direct</bundle.symbolicName>
 		<bundle.namespace>org.cytoscape.io</bundle.namespace>
 		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
 		<maven-bundle-plugin.version>2.5.4</maven-bundle-plugin.version>
@@ -16,10 +16,10 @@
 	</properties>
 
 	<groupId>org.cytoscape</groupId>
-	<artifactId>cyjs-publish</artifactId>
+	<artifactId>science-direct</artifactId>
 	<version>0.1.0</version>
 	<packaging>bundle</packaging>
-	<name>cyjs-publish</name>
+	<name>science-direct</name>
 
 	<repositories>
 		<repository>

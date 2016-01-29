@@ -28,6 +28,8 @@ $(function () {
         },
 
         boxSelectionEnabled: false,
+        minZoom: 0.3,
+        maxZoom: 5,
 
         ready: function () {
             window.cy = this;
