@@ -17,7 +17,7 @@
 
 	<groupId>org.cytoscape</groupId>
 	<artifactId>science-direct</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.3</version>
 	<packaging>bundle</packaging>
 	<name>science-direct</name>
 

@@ -7,3 +7,4 @@ template/node_modules
 template/dist
 template/.idea
 template/app/bower_components
+template/.tmp
