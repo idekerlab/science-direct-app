@@ -2,20 +2,27 @@ package org.cytoscape.io.internal.task;
 
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import org.cytoscape.application.CyApplicationConfiguration;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.io.internal.preview.PreviewUtil;
 import org.cytoscape.io.write.CyNetworkViewWriterFactory;
 import org.cytoscape.io.write.CySessionWriterFactory;
 import org.cytoscape.io.write.VizmapWriterFactory;
+import org.cytoscape.model.CyNetwork;
 import org.cytoscape.util.swing.OpenBrowser;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.work.AbstractTaskFactory;
+import org.cytoscape.work.Task;
 import org.cytoscape.work.TaskIterator;
+import org.cytoscape.work.TaskMonitor;
 import org.cytoscape.work.swing.DialogTaskManager;
 
 public class PublishForWebTaskFactory extends AbstractTaskFactory {
 
+	private static final Integer TH = 5000;
+	
 	private final CySessionWriterFactory publishForWebFactory;
 	private final OpenBrowser openBrowser;
 	private final DialogTaskManager taskManager;
@@ -46,11 +53,24 @@ public class PublishForWebTaskFactory extends AbstractTaskFactory {
 
 	@Override
 	public TaskIterator createTaskIterator() {
+		
+		// Check size
+		final CyNetwork curNet = appManager.getCurrentNetwork();
+		final int objectCount = curNet.getNodeCount() + curNet.getEdgeCount();
+		if(objectCount>TH) {
+			int selection = JOptionPane.showConfirmDialog(null,
+					"This network contains " + objectCount + " objects.  Do you really want to preview this?", 
+					"Warning: Large Network Detected", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			
+			if(selection == JOptionPane.NO_OPTION) {
+				return new TaskIterator(new EmptyTask());
+			}
+		}		
+		
 		final GeneratePreviewFileTask generatePreviewFileTask = new GeneratePreviewFileTask(
 				jsonStyleWriterFactory, vmm, cytoscapejsWriterFactory, util, appManager, appConfig);
 		final PreviewExportTask previewExportTask = new PreviewExportTask(openBrowser, publishForWebFactory,
 				taskManager);
-
 		return new TaskIterator(generatePreviewFileTask, previewExportTask);
 	}
 
@@ -80,5 +100,13 @@ public class PublishForWebTaskFactory extends AbstractTaskFactory {
 
 	@SuppressWarnings("rawtypes")
 	public void unregisterViewWriterFactory(final CyNetworkViewWriterFactory writerFactory, final Map props) {
+	}
+	
+	private final class EmptyTask implements Task {
+		@Override
+		public void run(TaskMonitor taskMonitor) throws Exception {}
+
+		@Override
+		public void cancel() {}
 	}
 }

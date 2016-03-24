@@ -54,7 +54,6 @@ public class PreviewExportTask extends AbstractTask {
 				dialog.setLocationByPlatform(true);
 				dialog.requestFocus();
 				final Object selection = optionPane.getValue();
-//				System.out.println("Selection: " + selection.toString());
 				if (selection.toString().equals(OPTION_EXPORT)) {
 					runExport();
 				}

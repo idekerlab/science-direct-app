@@ -56,10 +56,6 @@ public class CyActivator extends AbstractCyActivator {
 		final VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
 		final DialogTaskManager tManager = getService(bc, DialogTaskManager.class);
 		
-		// Import Task factories
-//		final CyNetworkViewWriterFactory cytoscapeJsWriterFactory = getService(bc, CyNetworkViewWriterFactory.class,
-//				"(id=cytoscapejsNetworkWriterFactory)");
-		
 		final PreviewUtil util = new PreviewUtil(config);
 		
 		final BasicCyFileFilter webArchiveFilter = new BasicCyFileFilter(

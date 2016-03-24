@@ -108,7 +108,6 @@ public class GeneratePreviewFileTask extends AbstractTask {
 	private final void writeBackground(final File cssFile, final VisualStyle style) throws IOException {
 		final Paint bgPaint = style.getDefaultValue(BasicVisualLexicon.NETWORK_BACKGROUND_PAINT);
 		String bgString = BasicVisualLexicon.NETWORK_BACKGROUND_PAINT.toSerializableString(bgPaint);
-		System.out.println("Current BG color: " + bgString);
 		final BufferedWriter writer = new BufferedWriter(new FileWriter(cssFile));
 		writer.write("#cy{background-color:" + bgString + "}");
 		writer.close();
