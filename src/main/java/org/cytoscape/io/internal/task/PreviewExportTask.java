@@ -14,7 +14,7 @@ import org.cytoscape.work.swing.DialogTaskManager;
 
 public class PreviewExportTask extends AbstractTask {
 
-	private static final String PREVIEW_URL = "http://localhost:3000/";
+	private static final String PREVIEW_URL = "http://localhost:3333/";
 
 	private final Icon icon;
 

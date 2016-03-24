@@ -13,7 +13,7 @@ import org.cytoscape.application.CyApplicationConfiguration;
 public class PreviewTemplateGenerator {
 
 	private static final String TEMPLATE_NAME = "template.zip";
-	private static final String WEB_RESOURCE_DIR_NAME = "preview_template";
+	public static final String WEB_RESOURCE_DIR_NAME = "preview_template";
 
 	private final CyApplicationConfiguration appConfig;
 

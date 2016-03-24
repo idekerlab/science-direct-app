@@ -18,20 +18,18 @@ public class PublishForWebWriterFactoryImpl implements CyWriterFactory, CySessio
 
 	private final CyFileFilter filter;
 	private final VisualMappingManager vmm;
-	private final CyNetworkViewWriterFactory cytoscapejsWriterFactory;
 	private final CyApplicationManager cyApplicationManager;
 	
 	// TODO: fix json-impl's core bug to use service ID
 	private VizmapWriterFactory jsonStyleWriterFactory;
+	private CyNetworkViewWriterFactory cytoscapejsWriterFactory;
 
 	public PublishForWebWriterFactoryImpl(
-			final CyNetworkViewWriterFactory cytoscapejsWriterFactory,
 			final VisualMappingManager vmm, 
 			final CyFileFilter filter,
 			final CyApplicationManager cyApplicationManager) {
 
 		this.vmm = vmm;
-		this.cytoscapejsWriterFactory = cytoscapejsWriterFactory;
 		this.filter = filter;
 		this.cyApplicationManager = cyApplicationManager;
 	}
@@ -61,5 +59,21 @@ public class PublishForWebWriterFactoryImpl implements CyWriterFactory, CySessio
 
 	@SuppressWarnings("rawtypes")
 	public void unregisterFactory(final VizmapWriterFactory writerFactory, final Map props) {
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void registerViewWriterFactory(final CyNetworkViewWriterFactory writerFactory, final Map props) {
+		final Object idObj = props.get("id");
+		if(idObj == null) {
+			return;
+		}
+		
+		if(idObj.toString().equals("cytoscapejsNetworkWriterFactory")) {
+			this.cytoscapejsWriterFactory = writerFactory;
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void unregisterViewWriterFactory(final CyNetworkViewWriterFactory writerFactory, final Map props) {
 	}
 }

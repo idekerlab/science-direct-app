@@ -2,6 +2,7 @@ package org.cytoscape.io.internal.task;
 
 import java.util.Map;
 
+import org.cytoscape.application.CyApplicationConfiguration;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.io.internal.preview.PreviewUtil;
 import org.cytoscape.io.write.CyNetworkViewWriterFactory;
@@ -20,16 +21,17 @@ public class PublishForWebTaskFactory extends AbstractTaskFactory {
 	private final DialogTaskManager taskManager;
 
 	private final VisualMappingManager vmm;
-	private final CyNetworkViewWriterFactory cytoscapejsWriterFactory;
 	private final PreviewUtil util;
 	private final CyApplicationManager appManager;
+	private final CyApplicationConfiguration appConfig;
 
 	private VizmapWriterFactory jsonStyleWriterFactory;
+	private CyNetworkViewWriterFactory cytoscapejsWriterFactory;
 
 	public PublishForWebTaskFactory(final CySessionWriterFactory publishForWebFactory, final OpenBrowser openBrowser,
 			final DialogTaskManager dialogTaskManager,
-			final VisualMappingManager vmm, final CyNetworkViewWriterFactory cytoscapejsWriterFactory,
-			final PreviewUtil util, final CyApplicationManager appManager) {
+			final VisualMappingManager vmm,
+			final PreviewUtil util, final CyApplicationManager appManager, final CyApplicationConfiguration appConfig) {
 		super();
 		
 		this.publishForWebFactory = publishForWebFactory;
@@ -37,15 +39,15 @@ public class PublishForWebTaskFactory extends AbstractTaskFactory {
 		this.taskManager = dialogTaskManager;
 
 		this.vmm = vmm;
-		this.cytoscapejsWriterFactory = cytoscapejsWriterFactory;
 		this.util = util;
 		this.appManager = appManager;
+		this.appConfig = appConfig;
 	}
 
 	@Override
 	public TaskIterator createTaskIterator() {
 		final GeneratePreviewFileTask generatePreviewFileTask = new GeneratePreviewFileTask(
-				jsonStyleWriterFactory, vmm, cytoscapejsWriterFactory, util, appManager);
+				jsonStyleWriterFactory, vmm, cytoscapejsWriterFactory, util, appManager, appConfig);
 		final PreviewExportTask previewExportTask = new PreviewExportTask(openBrowser, publishForWebFactory,
 				taskManager);
 
@@ -62,5 +64,21 @@ public class PublishForWebTaskFactory extends AbstractTaskFactory {
 
 	@SuppressWarnings("rawtypes")
 	public void unregisterFactory(final VizmapWriterFactory writerFactory, final Map props) {
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void registerViewWriterFactory(final CyNetworkViewWriterFactory writerFactory, final Map props) {
+		final Object idObj = props.get("id");
+		if(idObj == null) {
+			return;
+		}
+		
+		if(idObj.toString().equals("cytoscapejsNetworkWriterFactory")) {
+			this.cytoscapejsWriterFactory = writerFactory;
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void unregisterViewWriterFactory(final CyNetworkViewWriterFactory writerFactory, final Map props) {
 	}
 }

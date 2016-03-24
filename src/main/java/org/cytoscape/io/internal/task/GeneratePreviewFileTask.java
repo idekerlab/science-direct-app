@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.cytoscape.application.CyApplicationConfiguration;
 import org.cytoscape.application.CyApplicationManager;
+import org.cytoscape.io.internal.preview.PreviewTemplateGenerator;
 import org.cytoscape.io.internal.preview.PreviewUtil;
 import org.cytoscape.io.write.CyNetworkViewWriterFactory;
 import org.cytoscape.io.write.CyWriter;
@@ -26,17 +28,22 @@ public class GeneratePreviewFileTask extends AbstractTask {
 	private final CyNetworkViewWriterFactory cytoscapejsWriterFactory;
 	private final PreviewUtil util;
 	private final CyApplicationManager appManager;
+	
+	private final File resourceLocation;
 
 	
 	public GeneratePreviewFileTask(final VizmapWriterFactory jsonStyleWriterFactory, final VisualMappingManager vmm,
 			final CyNetworkViewWriterFactory cytoscapejsWriterFactory, final PreviewUtil util,
-			final CyApplicationManager appManager) {
+			final CyApplicationManager appManager, final CyApplicationConfiguration appConfig) {
 		super();
 		this.util = util;
 		this.jsonStyleWriterFactory = jsonStyleWriterFactory;
 		this.vmm = vmm;
 		this.cytoscapejsWriterFactory = cytoscapejsWriterFactory;
 		this.appManager = appManager;
+		
+		final File configLocation = appConfig.getConfigurationDirectoryLocation();
+		this.resourceLocation = new File(configLocation, PreviewTemplateGenerator.WEB_RESOURCE_DIR_NAME);
 	}
 
 	@Override
@@ -51,6 +58,7 @@ public class GeneratePreviewFileTask extends AbstractTask {
 
 		tm.setProgress(1.0);
 	}
+	
 
 
 	private final void writeNetworkFile(final String dir, final CyNetworkView view, final TaskMonitor tm)

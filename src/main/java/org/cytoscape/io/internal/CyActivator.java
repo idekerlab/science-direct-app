@@ -57,8 +57,8 @@ public class CyActivator extends AbstractCyActivator {
 		final DialogTaskManager tManager = getService(bc, DialogTaskManager.class);
 		
 		// Import Task factories
-		final CyNetworkViewWriterFactory cytoscapeJsWriterFactory = getService(bc, CyNetworkViewWriterFactory.class,
-				"(id=cytoscapejsNetworkWriterFactory)");
+//		final CyNetworkViewWriterFactory cytoscapeJsWriterFactory = getService(bc, CyNetworkViewWriterFactory.class,
+//				"(id=cytoscapejsNetworkWriterFactory)");
 		
 		final PreviewUtil util = new PreviewUtil(config);
 		
@@ -67,9 +67,7 @@ public class CyActivator extends AbstractCyActivator {
 				new String[] { "application/zip" }, "Zip archive file (.zip)", DataCategory.ARCHIVE, streamUtil);
 		
 		final CySessionWriterFactory publishForWebWriterFactory = 
-				new PublishForWebWriterFactoryImpl(
-						cytoscapeJsWriterFactory, 
-						vmm, webArchiveFilter, applicationManager);
+				new PublishForWebWriterFactoryImpl(vmm, webArchiveFilter, applicationManager);
 		
 		final Properties publishForWebWriterFactoryProps = new Properties();
 		publishForWebWriterFactoryProps.put(ID, "publishForWebWriterFactory");
@@ -78,7 +76,7 @@ public class CyActivator extends AbstractCyActivator {
 		
 		// Export task
 		final PublishForWebTaskFactory publishForWebTaskFactory = new PublishForWebTaskFactory(
-				publishForWebWriterFactory, openBrowser, tManager, vmm, cytoscapeJsWriterFactory, util, applicationManager);
+				publishForWebWriterFactory, openBrowser, tManager, vmm, util, applicationManager, config);
 		final Properties publishForWebTaskFactoryProps = new Properties();
 		publishForWebTaskFactoryProps.setProperty(PREFERRED_MENU,"File.Export");
 		publishForWebTaskFactoryProps.setProperty(ENABLE_FOR, ENABLE_FOR_NETWORK_AND_VIEW);
@@ -94,6 +92,11 @@ public class CyActivator extends AbstractCyActivator {
 		// TODO: fix this by assigning OSGI ID for JSON Style writer
 		registerServiceListener(bc, publishForWebWriterFactory, "registerFactory", "unregisterFactory", VizmapWriterFactory.class);
 		registerServiceListener(bc, publishForWebTaskFactory, "registerFactory", "unregisterFactory", VizmapWriterFactory.class);
+		
+		registerServiceListener(bc, publishForWebWriterFactory, 
+				"registerViewWriterFactory", "unregisterViewWriterFactory", CyNetworkViewWriterFactory.class);
+		registerServiceListener(bc, publishForWebTaskFactory, 
+				"registerViewWriterFactory", "unregisterViewWriterFactory", CyNetworkViewWriterFactory.class);
 		
 		// Extract resource file if necessary
 		final PreviewTemplateGenerator generator = new PreviewTemplateGenerator(config);

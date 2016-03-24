@@ -6,8 +6,14 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PreviewServer {
+	
+	private static final Logger logger = LoggerFactory.getLogger(PreviewServer.class);
+	
+	private static final Integer PORT = 3333;
 	
 	private final PreviewUtil util;
 	
@@ -19,7 +25,7 @@ public class PreviewServer {
 	}
 
 	public void startServer() throws Exception {
-		this.server = new Server(3000);
+		this.server = new Server(PORT);
 		final ResourceHandler resource_handler = new ResourceHandler();
 		resource_handler.setDirectoriesListed(true);
 		resource_handler.setWelcomeFiles(new String[] { "index.html" });
@@ -33,7 +39,7 @@ public class PreviewServer {
 		gzip.setHandler(handlers);
 
 		server.start();
-		System.out.println("listening....");
+		logger.info("Preview server is listening on port " + PORT.toString());
 	}
 	
 	public void stopServer() throws Exception {
