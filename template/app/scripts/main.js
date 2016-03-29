@@ -41,6 +41,9 @@ $(function () {
                     var vs = findPreferredStyle(styles);
                     cy.style().fromJson(vs.style).update();
                     cy.nodes().lock();
+
+                    // Remove loading tag
+                    $('#loading').remove();
                 });
             });
         }
