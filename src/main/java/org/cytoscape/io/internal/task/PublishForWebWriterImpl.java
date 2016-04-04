@@ -27,6 +27,8 @@ import org.cytoscape.work.TaskMonitor;
 public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 
 	private static final String JSON_EXT = ".json";
+	private static final String CYJS_EXT = ".cyjs";
+	private static final String STYLE_FILE_NAME = "style";
 	private static final String FILE_NAME_SEPARATOR = "____";
 
 	private ZipOutputStream zos;
@@ -108,7 +110,14 @@ public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 
 			// Archive name
 			final String originalName = file.getName();
-			final String archiveName = originalName.split(FILE_NAME_SEPARATOR)[0] + JSON_EXT;
+			
+			String archiveName = originalName.split(FILE_NAME_SEPARATOR)[0];
+			if(originalName.startsWith(STYLE_FILE_NAME)) {
+				archiveName += JSON_EXT;
+			} else {
+				archiveName += CYJS_EXT;
+			}
+			
 			final Path dataFilePath = Paths.get(archiveName);
 			zipFilePath = dataFilePath.toString();
 
@@ -132,7 +141,7 @@ public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 
 	private final File createStyleFile(final TaskMonitor tm) throws Exception {
 		final Set<VisualStyle> styles = vmm.getAllVisualStyles();
-		final File styleFile = File.createTempFile("style" + FILE_NAME_SEPARATOR, null);
+		final File styleFile = File.createTempFile(STYLE_FILE_NAME + FILE_NAME_SEPARATOR, null);
 		final CyWriter vizmapWriter = jsonStyleWriterFactory.createWriter(new FileOutputStream(styleFile), styles);
 		vizmapWriter.run(tm);
 		return styleFile;
