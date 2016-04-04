@@ -28,7 +28,7 @@ $(function () {
         },
 
         boxSelectionEnabled: false,
-        minZoom: 0.3,
+        minZoom: 0.1,
         maxZoom: 5,
 
         ready: function () {
