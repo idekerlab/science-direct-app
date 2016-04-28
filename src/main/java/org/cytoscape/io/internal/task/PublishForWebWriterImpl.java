@@ -182,7 +182,7 @@ public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 			network.getDefaultNetworkTable().createColumn(STYLE_COLUMN_NAME, String.class, false);
 		}
 		
-		network.getRow(network).set(STYLE_COLUMN_NAME, vmm.getCurrentVisualStyle().getTitle());
+		network.getRow(network).set(STYLE_COLUMN_NAME, DEF_STYLE_NAME);
 		
 		final String jsonFileName = networkName;
 		final File tempFile = File.createTempFile(jsonFileName + FILE_NAME_SEPARATOR, null);
