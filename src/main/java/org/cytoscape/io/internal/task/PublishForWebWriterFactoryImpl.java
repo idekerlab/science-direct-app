@@ -12,6 +12,7 @@ import org.cytoscape.io.write.CyWriterFactory;
 import org.cytoscape.io.write.VizmapWriterFactory;
 import org.cytoscape.session.CySession;
 import org.cytoscape.view.vizmap.VisualMappingManager;
+import org.cytoscape.view.vizmap.VisualStyleFactory;
 
 
 public class PublishForWebWriterFactoryImpl implements CyWriterFactory, CySessionWriterFactory {
@@ -23,15 +24,19 @@ public class PublishForWebWriterFactoryImpl implements CyWriterFactory, CySessio
 	// TODO: fix json-impl's core bug to use service ID
 	private VizmapWriterFactory jsonStyleWriterFactory;
 	private CyNetworkViewWriterFactory cytoscapejsWriterFactory;
+	
+	private final VisualStyleFactory styleFactory;
 
 	public PublishForWebWriterFactoryImpl(
 			final VisualMappingManager vmm, 
 			final CyFileFilter filter,
-			final CyApplicationManager cyApplicationManager) {
+			final CyApplicationManager cyApplicationManager,
+			final VisualStyleFactory styleFactory) {
 
 		this.vmm = vmm;
 		this.filter = filter;
 		this.cyApplicationManager = cyApplicationManager;
+		this.styleFactory = styleFactory;
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class PublishForWebWriterFactoryImpl implements CyWriterFactory, CySessio
 		}
 		
 		return new PublishForWebWriterImpl(outputStream, jsonStyleWriterFactory, vmm, cytoscapejsWriterFactory,
-				cyApplicationManager);
+				cyApplicationManager, styleFactory);
 	}
 
 	@Override

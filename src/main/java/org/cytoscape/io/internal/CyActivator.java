@@ -30,6 +30,7 @@ import org.cytoscape.io.write.VizmapWriterFactory;
 import org.cytoscape.service.util.AbstractCyActivator;
 import org.cytoscape.util.swing.OpenBrowser;
 import org.cytoscape.view.vizmap.VisualMappingManager;
+import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.work.swing.DialogTaskManager;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -56,6 +57,8 @@ public class CyActivator extends AbstractCyActivator {
 		final VisualMappingManager vmm = getService(bc, VisualMappingManager.class);
 		final DialogTaskManager tManager = getService(bc, DialogTaskManager.class);
 		
+		final VisualStyleFactory styleFactory = getService(bc, VisualStyleFactory.class);
+		
 		final PreviewUtil util = new PreviewUtil(config);
 		
 		final BasicCyFileFilter webArchiveFilter = new BasicCyFileFilter(
@@ -63,7 +66,7 @@ public class CyActivator extends AbstractCyActivator {
 				new String[] { "application/zip" }, "Zip archive file (.zip)", DataCategory.ARCHIVE, streamUtil);
 		
 		final CySessionWriterFactory publishForWebWriterFactory = 
-				new PublishForWebWriterFactoryImpl(vmm, webArchiveFilter, applicationManager);
+				new PublishForWebWriterFactoryImpl(vmm, webArchiveFilter, applicationManager, styleFactory);
 		
 		final Properties publishForWebWriterFactoryProps = new Properties();
 		publishForWebWriterFactoryProps.put(ID, "publishForWebWriterFactory");

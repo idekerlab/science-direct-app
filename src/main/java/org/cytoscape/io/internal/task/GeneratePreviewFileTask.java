@@ -29,6 +29,7 @@ public class GeneratePreviewFileTask extends AbstractTask {
 	private static final String NETWORK_FILE_NAME = "network.json";
 	private static final String STYLE_FILE_NAME = "style.json";
 	private static final String BACKGROUND_CSS_FILE_NAME = "bg.css";
+	
 
 	private final VizmapWriterFactory jsonStyleWriterFactory;
 	private final VisualMappingManager vmm;

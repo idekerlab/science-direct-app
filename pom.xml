@@ -17,7 +17,7 @@
 
 	<groupId>org.cytoscape</groupId>
 	<artifactId>science-direct</artifactId>
-	<version>0.1.6</version>
+	<version>0.2.0</version>
 	<packaging>bundle</packaging>
 	<name>science-direct</name>
 
@@ -99,7 +99,6 @@
 
 		</plugins>
 	</build>
-
 
 	<dependencies>
 		<!-- Cytoscape 3 Dependencies -->

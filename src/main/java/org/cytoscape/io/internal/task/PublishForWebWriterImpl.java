@@ -17,10 +17,12 @@ import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.io.write.CyNetworkViewWriterFactory;
 import org.cytoscape.io.write.CyWriter;
 import org.cytoscape.io.write.VizmapWriterFactory;
+import org.cytoscape.model.CyColumn;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
+import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
 
@@ -30,6 +32,10 @@ public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 	private static final String CYJS_EXT = ".cyjs";
 	private static final String STYLE_FILE_NAME = "style";
 	private static final String FILE_NAME_SEPARATOR = "____";
+	
+	private static final String DEF_STYLE_NAME = "default";
+	
+	private static final String STYLE_COLUMN_NAME = "assignedStyle";
 
 	private ZipOutputStream zos;
 
@@ -39,16 +45,20 @@ public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 	private final CyNetworkViewWriterFactory cytoscapejsWriterFactory;
 
 	private final CyApplicationManager appManager;
+	
+	private final VisualStyleFactory styleFactory;
+	
 
 	public PublishForWebWriterImpl(final OutputStream outputStream, final VizmapWriterFactory jsonStyleWriterFactory,
 			final VisualMappingManager vmm, final CyNetworkViewWriterFactory cytoscapejsWriterFactory,
-			final CyApplicationManager appManager) {
+			final CyApplicationManager appManager, final VisualStyleFactory styleFactory) {
 
 		this.outputStream = outputStream;
 		this.jsonStyleWriterFactory = jsonStyleWriterFactory;
 		this.vmm = vmm;
 		this.cytoscapejsWriterFactory = cytoscapejsWriterFactory;
 		this.appManager = appManager;
+		this.styleFactory = styleFactory;
 	}
 
 	@Override
@@ -140,10 +150,21 @@ public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 	}
 
 	private final File createStyleFile(final TaskMonitor tm) throws Exception {
-		final Set<VisualStyle> styles = vmm.getAllVisualStyles();
+		// Use only the first one.
+		final Set<VisualStyle> styles = new HashSet<>();
+		final VisualStyle style = vmm.getCurrentVisualStyle();
+		
+		//TODO: THIS IS A HACK.  We should NOT depend on the name "default." 
+		VisualStyle copyStyle = styleFactory.createVisualStyle(style);
+		copyStyle.setTitle(DEF_STYLE_NAME); // Force to change the name to "default"
+		styles.add(copyStyle);
+		
 		final File styleFile = File.createTempFile(STYLE_FILE_NAME + FILE_NAME_SEPARATOR, null);
 		final CyWriter vizmapWriter = jsonStyleWriterFactory.createWriter(new FileOutputStream(styleFile), styles);
 		vizmapWriter.run(tm);
+		
+		copyStyle = null;
+		
 		return styleFile;
 	}
 
@@ -153,6 +174,16 @@ public class PublishForWebWriterImpl extends AbstractTask implements CyWriter {
 		}
 		final CyNetwork network = view.getModel();
 		final String networkName = network.getRow(network).get(CyNetwork.NAME, String.class);
+		
+		// Assign column name to the Style
+		CyColumn col = network.getDefaultNetworkTable().getColumn(STYLE_COLUMN_NAME);
+		if(col == null) {
+			// Create col for the network
+			network.getDefaultNetworkTable().createColumn(STYLE_COLUMN_NAME, String.class, false);
+		}
+		
+		network.getRow(network).set(STYLE_COLUMN_NAME, vmm.getCurrentVisualStyle().getTitle());
+		
 		final String jsonFileName = networkName;
 		final File tempFile = File.createTempFile(jsonFileName + FILE_NAME_SEPARATOR, null);
 		final CyWriter writer = cytoscapejsWriterFactory.createWriter(new FileOutputStream(tempFile), view);
